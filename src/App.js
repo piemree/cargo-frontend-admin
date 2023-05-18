@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './scss/style.scss';
 import Login from './views/pages/login/Login';
-import Register from './views/pages/register/Register';
 import Page404 from './views/pages/page404/Page404';
 import { privateRoutes } from './routes';
 import DefaultLayout from './layout/DefaultLayout';
@@ -21,15 +20,6 @@ function App() {
             element={
               <PublicRoute>
                 <Login />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/register"
-            name="Register Page"
-            element={
-              <PublicRoute>
-                <Register />
               </PublicRoute>
             }
           />

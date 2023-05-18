@@ -1,6 +1,5 @@
 import React from 'react';
 import Login from './views/pages/login/Login';
-import Register from './views/pages/register/Register';
 import AddPersonel from './views/pages/addPersonel/AddPersonel';
 import AddBranch from './views/pages/addBranch/AddBranch';
 import AddVehicle from './views/pages/addVehicle/AddVehicle';
@@ -156,7 +155,6 @@ const privateRoutes = [
 
 const publicRoutes = [
   { path: '/login', name: 'Login', element: Login },
-  { path: '/register', name: 'Register', element: Register },
 ];
 
 export { privateRoutes, publicRoutes };
