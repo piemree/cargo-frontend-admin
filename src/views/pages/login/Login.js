@@ -44,6 +44,7 @@ const Login = () => {
         navigate('/dashboard');
       }
     } catch (error) {
+      alert('Giriş başarısız');
       global.setUser(null);
       console.log(error);
     }

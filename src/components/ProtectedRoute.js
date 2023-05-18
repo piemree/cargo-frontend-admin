@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
 
   const user = getUser();
 
-  if (!user) {
+  if (!user || user.role !== 'admin') {
     localStorage.removeItem('token');
     // eslint-disable-next-line react/react-in-jsx-scope
     return <Navigate to="/login" replace />;
