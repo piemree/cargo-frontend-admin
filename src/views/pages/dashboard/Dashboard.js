@@ -106,7 +106,7 @@ const Dashboard = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         {item?.role === 'transportPersonel' && (
-                          <div>Araç Şoförü</div>
+                          <div>Nakliye Personeli</div>
                         )}
                         {item?.role === 'branchPersonel' && (
                           <div>Şube Personeli</div>
