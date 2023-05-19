@@ -20,12 +20,22 @@ import request from 'src/request';
 
 const Dashboard = () => {
   const [branchList, setBranchList] = useState([]);
+  const [personelList, setPersonelList] = useState([]);
 
   useEffect(() => {
     request
       .get('/branch/getAllBranches')
       .then((response) => {
         setBranchList(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error.response?.data?.error?.message);
+      });
+
+    request
+      .get('/personel/getAllPersonels')
+      .then((response) => {
+        setPersonelList(response.data.data);
       })
       .catch((error) => {
         console.log(error.response?.data?.error?.message);
@@ -66,6 +76,53 @@ const Dashboard = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.isActive ? 'Aktif' : 'Pasif'}</div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            </CCardBody>
+          </CCard>
+          <CCard className="mb-4">
+            <CCardHeader>Personeller</CCardHeader>
+            <CCardBody>
+              <CTable align="middle" className="mb-0 border" hover responsive>
+                <CTableHead color="light">
+                  <CTableRow>
+                    <CTableHeaderCell>Tam Ad</CTableHeaderCell>
+                    <CTableHeaderCell>Rol</CTableHeaderCell>
+                    <CTableHeaderCell>Şube/Araç</CTableHeaderCell>
+                    <CTableHeaderCell>TC</CTableHeaderCell>
+                    <CTableHeaderCell>E-Posta</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {personelList.map((item, index) => (
+                    <CTableRow v-for="item in tableItems" key={index}>
+                      <CTableDataCell>
+                        <div>
+                          {item?.name} {item?.surname}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        {item?.role === 'transportPersonel' && (
+                          <div>Araç Şoförü</div>
+                        )}
+                        {item?.role === 'branchPersonel' && (
+                          <div>Şube Personeli</div>
+                        )}
+                        {item?.role === 'admin' && <div>Admin</div>}
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>
+                          {item?.branch?.name || item?.vehicle?.licensePlate}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.tcNo}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.email}</div>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
