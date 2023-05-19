@@ -115,12 +115,12 @@ const Dashboard = () => {
                         {item?.role === 'admin' && <div>Admin</div>}
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item?.branch?._id || item?.vehicle?._id}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
                         <div>
                           {item?.branch?.name || item?.vehicle?.licensePlate}
                         </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.branch?._id || item?.vehicle?._id}</div>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.tcNo}</div>
