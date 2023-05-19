@@ -21,6 +21,7 @@ import request from 'src/request';
 const Dashboard = () => {
   const [branchList, setBranchList] = useState([]);
   const [personelList, setPersonelList] = useState([]);
+  const [cargoList, setCargoList] = useState([]);
 
   useEffect(() => {
     request
@@ -40,6 +41,15 @@ const Dashboard = () => {
       .catch((error) => {
         console.log(error.response?.data?.error?.message);
       });
+
+    request
+      .get('/cargo/getAllCargos')
+      .then((response) => {
+        setCargoList(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response?.data?.error?.message);
+      });
   }, []);
 
   return (
@@ -52,6 +62,7 @@ const Dashboard = () => {
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
+                    <CTableHeaderCell>Şube ID</CTableHeaderCell>
                     <CTableHeaderCell>Şube Adı</CTableHeaderCell>
                     <CTableHeaderCell>Toplam Kargo Sayısı</CTableHeaderCell>
                     <CTableHeaderCell>Bekleyen Kargo Sayısı</CTableHeaderCell>
@@ -62,6 +73,9 @@ const Dashboard = () => {
                 <CTableBody>
                   {branchList.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
+                      <CTableDataCell>
+                        <div>{item?._id}</div>
+                      </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.name}</div>
                       </CTableDataCell>
@@ -127,6 +141,63 @@ const Dashboard = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.email}</div>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            </CCardBody>
+          </CCard>
+          <CCard className="mb-4">
+            <CCardHeader>Kargolar</CCardHeader>
+            <CCardBody>
+              <CTable align="middle" className="mb-0 border" hover responsive>
+                <CTableHead color="light">
+                  <CTableRow>
+                    <CTableHeaderCell>Gönderici</CTableHeaderCell>
+                    <CTableHeaderCell>Alıcı</CTableHeaderCell>
+                    <CTableHeaderCell>Kargo içeriği</CTableHeaderCell>
+                    <CTableHeaderCell>Kayıt Şube</CTableHeaderCell>
+                    <CTableHeaderCell>Hedef Şube</CTableHeaderCell>
+                    <CTableHeaderCell>Araç Plakası</CTableHeaderCell>
+                    <CTableHeaderCell>Durum</CTableHeaderCell>
+                    <CTableHeaderCell>Toplam Fiyat</CTableHeaderCell>
+                    <CTableHeaderCell>ID</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {cargoList.map((item, index) => (
+                    <CTableRow v-for="item in tableItems" key={index}>
+                      <CTableDataCell>
+                        <div>
+                          {item?.sender?.name} {item?.sender?.surname}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>
+                          {item?.receiver?.name} {item?.receiver?.surname}
+                        </div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.content}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.registerBranch?.name}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.targetBranch?.name}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.vehicle?.licensePlate}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.status}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?.totalPrice}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <div>{item?._id}</div>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
