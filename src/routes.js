@@ -5,6 +5,7 @@ import AddBranch from './views/pages/addBranch/AddBranch';
 import AddVehicle from './views/pages/addVehicle/AddVehicle';
 import AssignVehicleToPersonel from './views/pages/assignVehicleToPersonel/AssignVehicleToPersonel';
 import AddPersonelsToBranch from './views/pages/addPersonelsToBranch/AddPersonelsToBranch';
+import BranchDetail from './views/pages/branchDetail/BranchDetail';
 
 const Dashboard = React.lazy(() => import('./views/pages/dashboard/Dashboard'));
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
@@ -88,8 +89,17 @@ const privateRoutes = [
   { path: '/addPersonel', name: 'AddPersonel', element: AddPersonel },
   { path: '/addBranch', name: 'AddBranch', element: AddBranch },
   { path: '/addVehicle', name: 'AddVehicle', element: AddVehicle },
-  { path: '/assignVehicleToPersonel', name: 'AssignVehicleToPersonel', element: AssignVehicleToPersonel },
-  { path: '/addPersonelsToBranch', name: 'AddPersonelsToBranch', element: AddPersonelsToBranch },
+  {
+    path: '/assignVehicleToPersonel',
+    name: 'AssignVehicleToPersonel',
+    element: AssignVehicleToPersonel,
+  },
+  {
+    path: '/addPersonelsToBranch',
+    name: 'AddPersonelsToBranch',
+    element: AddPersonelsToBranch,
+  },
+  { path: '/branch/:id', name: 'Branch Detail', element: BranchDetail },
 
   //components
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
@@ -153,8 +163,6 @@ const privateRoutes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
 ];
 
-const publicRoutes = [
-  { path: '/login', name: 'Login', element: Login },
-];
+const publicRoutes = [{ path: '/login', name: 'Login', element: Login }];
 
 export { privateRoutes, publicRoutes };

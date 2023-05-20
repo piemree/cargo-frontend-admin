@@ -25,7 +25,8 @@ const Login = () => {
   const global = useGlobals();
   const navigate = useNavigate();
 
-  async function handleLogin() {
+  async function handleLogin(e) {
+    e.preventDefault();
     try {
       const result = await request.post('/auth/personel/login', {
         email,
@@ -57,11 +58,8 @@ const Login = () => {
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm>
-                    <h1>Login</h1>
-                    <p className="text-medium-emphasis">
-                      Sign In to your account
-                    </p>
+                  <CForm onSubmit={handleLogin}>
+                    <h2 className="mb-4">Giriş Yap</h2>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -86,12 +84,8 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton
-                          color="primary"
-                          className="px-4"
-                          onClick={handleLogin}
-                        >
-                          Login
+                        <CButton type="submit" color="primary" className="px-4">
+                          Giriş
                         </CButton>
                       </CCol>
                     </CRow>

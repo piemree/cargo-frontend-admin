@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import {
   CAvatar,
+  CButton,
   CCard,
   CCardBody,
   CCardHeader,
@@ -17,11 +18,66 @@ import {
 } from '@coreui/react';
 
 import request from 'src/request';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [branchList, setBranchList] = useState([]);
   const [personelList, setPersonelList] = useState([]);
-  const [cargoList, setCargoList] = useState([]);
+  const [vehicleList, setVehicleList] = useState([]);
+
+  const branchDelete = async (branchId) => {
+    // create a confirmation dialog
+    if (!window.confirm('Şubeyi silmek istediğinize emin misiniz?')) {
+      return;
+    }
+    try {
+      const result = await request.delete(`/branch/deleteBranch/${branchId}`);
+      if (result.data.success) {
+        alert('Şube silindi');
+        setBranchList(branchList.filter((item) => item._id !== branchId));
+      }
+    } catch (error) {
+      alert('Şube silinemedi');
+      console.log(error);
+    }
+  };
+  const personelDelete = async (personelId) => {
+    // create a confirmation dialog
+    if (!window.confirm('Personeli silmek istediğinize emin misiniz?')) {
+      return;
+    }
+    try {
+      const result = await request.delete(
+        `/personel/deletePersonel/${personelId}`
+      );
+      if (result.data.success) {
+        alert('Personel silindi');
+        setPersonelList(personelList.filter((item) => item._id !== personelId));
+      }
+    } catch (error) {
+      alert('Personel silinemedi');
+      console.log(error);
+    }
+  };
+
+  const vegicleDelete = async (vehicleId) => {
+    // create a confirmation dialog
+    if (!window.confirm('Araç silmek istediğinize emin misiniz?')) {
+      return;
+    }
+    try {
+      const result = await request.delete(
+        `/vehicle/deleteVehicle/${vehicleId}`
+      );
+      if (result.data.success) {
+        alert('Araç silindi');
+        setVehicleList(vehicleList.filter((item) => item._id !== vehicleId));
+      }
+    } catch (error) {
+      alert('Araç silinemedi');
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     request
@@ -43,9 +99,9 @@ const Dashboard = () => {
       });
 
     request
-      .get('/cargo/getAllCargos')
+      .get('/vehicle/getAllVehicles')
       .then((response) => {
-        setCargoList(response.data);
+        setVehicleList(response.data.data);
       })
       .catch((error) => {
         console.log(error.response?.data?.error?.message);
@@ -62,22 +118,21 @@ const Dashboard = () => {
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell>Şube ID</CTableHeaderCell>
                     <CTableHeaderCell>Şube Adı</CTableHeaderCell>
                     <CTableHeaderCell>Toplam Kargo Sayısı</CTableHeaderCell>
                     <CTableHeaderCell>Bekleyen Kargo Sayısı</CTableHeaderCell>
                     <CTableHeaderCell>Personel Sayısı</CTableHeaderCell>
                     <CTableHeaderCell>Durum</CTableHeaderCell>
+                    <CTableHeaderCell></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {branchList.map((item, index) => (
+                  {branchList?.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>{item?._id}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?.name}</div>
+                        <Link to={`/branch/${item?._id}`}>
+                          <div>{item?.name}</div>
+                        </Link>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.cargos?.length}</div>
@@ -90,6 +145,15 @@ const Dashboard = () => {
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.isActive ? 'Aktif' : 'Pasif'}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <CButton
+                          color="danger"
+                          className="py-0 w-100 text-white"
+                          onClick={() => branchDelete(item._id)}
+                        >
+                          Sil
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -106,13 +170,13 @@ const Dashboard = () => {
                     <CTableHeaderCell>Tam Ad</CTableHeaderCell>
                     <CTableHeaderCell>Rol</CTableHeaderCell>
                     <CTableHeaderCell>Şube/Araç</CTableHeaderCell>
-                    <CTableHeaderCell>Şube/Araç ID</CTableHeaderCell>
                     <CTableHeaderCell>TC</CTableHeaderCell>
                     <CTableHeaderCell>E-Posta</CTableHeaderCell>
+                    <CTableHeaderCell></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {personelList.map((item, index) => (
+                  {personelList?.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
                         <div>
@@ -126,6 +190,9 @@ const Dashboard = () => {
                         {item?.role === 'branchPersonel' && (
                           <div>Şube Personeli</div>
                         )}
+                        {item?.role === 'customerServicePersonel' && (
+                          <div>Müşteri Hizmetleri Personeli</div>
+                        )}
                         {item?.role === 'admin' && <div>Admin</div>}
                       </CTableDataCell>
                       <CTableDataCell>
@@ -134,13 +201,19 @@ const Dashboard = () => {
                         </div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item?.branch?._id || item?.vehicle?._id}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
                         <div>{item?.tcNo}</div>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>{item?.email}</div>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <CButton
+                          color="danger"
+                          className="py-0 w-100 text-white"
+                          onClick={() => personelDelete(item._id)}
+                        >
+                          Sil
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
@@ -149,55 +222,39 @@ const Dashboard = () => {
             </CCardBody>
           </CCard>
           <CCard className="mb-4">
-            <CCardHeader>Kargolar</CCardHeader>
+            <CCardHeader>Araçlar</CCardHeader>
             <CCardBody>
               <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
-                    <CTableHeaderCell>Gönderici</CTableHeaderCell>
-                    <CTableHeaderCell>Alıcı</CTableHeaderCell>
-                    <CTableHeaderCell>Kargo içeriği</CTableHeaderCell>
-                    <CTableHeaderCell>Kayıt Şube</CTableHeaderCell>
-                    <CTableHeaderCell>Hedef Şube</CTableHeaderCell>
-                    <CTableHeaderCell>Araç Plakası</CTableHeaderCell>
-                    <CTableHeaderCell>Durum</CTableHeaderCell>
-                    <CTableHeaderCell>Toplam Fiyat</CTableHeaderCell>
-                    <CTableHeaderCell>ID</CTableHeaderCell>
+                    <CTableHeaderCell>Plaka</CTableHeaderCell>
+                    <CTableHeaderCell>Personel</CTableHeaderCell>
+                    <CTableHeaderCell>Kargo Sayısı</CTableHeaderCell>
+                    <CTableHeaderCell></CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {cargoList.map((item, index) => (
+                  {vehicleList?.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>
-                        <div>
-                          {item?.sender?.name} {item?.sender?.surname}
-                        </div>
+                        <div>{item?.licensePlate}</div>
                       </CTableDataCell>
                       <CTableDataCell>
                         <div>
-                          {item?.receiver?.name} {item?.receiver?.surname}
+                          {item?.driver?.name} {item?.driver?.surname}
                         </div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item?.content}</div>
+                        <div>{item?.cargos?.length}</div>
                       </CTableDataCell>
                       <CTableDataCell>
-                        <div>{item?.registerBranch?.name}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?.targetBranch?.name}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?.vehicle?.licensePlate}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?.status}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?.totalPrice}</div>
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        <div>{item?._id}</div>
+                        <CButton
+                          color="danger"
+                          className="py-0 w-100 text-white"
+                          onClick={() => vegicleDelete(item._id)}
+                        >
+                          Sil
+                        </CButton>
                       </CTableDataCell>
                     </CTableRow>
                   ))}
