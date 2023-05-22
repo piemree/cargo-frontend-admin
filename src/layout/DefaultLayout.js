@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { AppSidebar, AppFooter, AppHeader } from '../components/index'
+import { AppSidebar, AppHeader } from '../components/index'
 import propTypes from 'prop-types'
 import { CContainer, CSpinner } from '@coreui/react'
 

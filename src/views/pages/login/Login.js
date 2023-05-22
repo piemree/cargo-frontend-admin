@@ -83,10 +83,23 @@ const Login = () => {
                       />
                     </CInputGroup>
                     <CRow>
-                      <CCol xs={6}>
+                      <CCol xs={3}>
                         <CButton type="submit" color="primary" className="px-4">
                           Giriş
                         </CButton>
+                      </CCol>
+                      <CCol xs={9} className="d-flex justify-content-end">
+                        <Link
+                          color="link"
+                          className="px-0 mx-2"
+                          target='_blank'
+                          to={
+                            process.env.REACT_APP_API_URL +
+                            '/api/auth/personelForgotPassword'
+                          }
+                        >
+                          Şifremi Unuttum
+                        </Link>
                       </CCol>
                     </CRow>
                   </CForm>
