@@ -20,13 +20,9 @@ const AddBranch = () => {
     address: '',
     phone: '',
   });
-  const [branchPersonelList, setBranchPersonelList] = useState([]);
-
-  const [error, setError] = useState('');
 
   const onFormSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     try {
       const result = await request.post('/branch/create', state);
       if (result.data.success) {
@@ -41,7 +37,6 @@ const AddBranch = () => {
     } catch (error) {
       alert(error.response?.data?.error?.message);
       console.log(error);
-      setError(error.response?.data?.error?.message);
     }
   };
 

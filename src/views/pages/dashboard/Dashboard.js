@@ -60,7 +60,7 @@ const Dashboard = () => {
     }
   };
 
-  const vegicleDelete = async (vehicleId) => {
+  const vehicleDelete = async (vehicleId) => {
     // create a confirmation dialog
     if (!window.confirm('Araç silmek istediğinize emin misiniz?')) {
       return;
@@ -251,7 +251,7 @@ const Dashboard = () => {
                         <CButton
                           color="danger"
                           className="py-0 w-100 text-white"
-                          onClick={() => vegicleDelete(item._id)}
+                          onClick={() => vehicleDelete(item._id)}
                         >
                           Sil
                         </CButton>

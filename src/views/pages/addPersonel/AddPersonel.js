@@ -130,6 +130,9 @@ const AddPersonel = () => {
                       <option value="transportPersonel">
                         Nakliye Personeli
                       </option>
+                      <option value="customerServicePersonel">
+                        Müşteri Hizmetleri Personeli
+                      </option>
                       <option value="admin">Admin</option>
                     </CFormSelect>
                   </CInputGroup>
